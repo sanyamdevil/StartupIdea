@@ -1,103 +1,105 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
-export default function Home() {
+export default function LandingPage() {
+  const [startups, setStartups] = useState([]);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Fetch all form submissions from the API
+  useEffect(() => {
+    async function fetchStartups() {
+      try {
+        const res = await fetch("/api/get-submissions");
+        const data = await res.json();
+        if (res.ok) {
+          setStartups(data);
+        } else {
+          console.error("Failed to fetch submissions:", data.error);
+        }
+      } catch (err) {
+        console.error("Error fetching startups:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStartups();
+  }, []);
+
+  // Filter startups based on search query
+  const filteredStartups = startups.filter((startup) =>
+    startup.name.toLowerCase().includes(query.toLowerCase())
+  );
+
+  if (loading) {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700">
+      <h1 className="text-3xl md:text-5xl font-bold text-yellow-400 drop-shadow-lg text-center">
+        Welcome to StartupIdeas Website ✨
+      </h1>
+    </div>
+  );
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  return (
+    <div className="max-w-7xl mx-auto px-6 pt-28 pb-10">
+      {/* Search bar */}
+      <div className="flex justify-center mb-8">
+        <input
+          type="text"
+          placeholder="Search Startup Ideas..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full max-w-md px-4 py-2 border-2 border-orange-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+      </div>
+
+      {/* Card grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {filteredStartups.map((startup) => (
+          <motion.div
+            key={startup._id}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            whileHover={{ scale: 1.05 }}
+            className="bg-white/70 backdrop-blur-lg border-2 border-transparent hover:border-orange-500 shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-all duration-300"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <div className="w-full h-48 relative rounded-t-xl overflow-hidden">
+              <Image
+                src={startup.imageUrl}
+                alt={startup.name}
+                fill
+                sizes="(max-width: 640px) 100vw,
+                       (max-width: 1024px) 50vw,
+                       33vw"
+                className="object-cover"
+              />
+            </div>
+            <h2 className="mt-4 text-xl font-semibold text-orange-600">
+              {startup.name}
+            </h2>
+            <p className="text-gray-700 text-sm">{startup.description}</p>
+            <Link
+              href={startup.website}
+              target="_blank"
+              className="mt-4 px-5 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+            >
+              View
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+
+      {filteredStartups.length === 0 && !loading && (
+        <p className="text-center text-gray-400 mt-10">
+          No startup ideas found for "{query}"
+        </p>
+      )}
     </div>
   );
 }
