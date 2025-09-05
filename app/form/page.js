@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function FormPage() {
   const [preview, setPreview] = useState(null);
@@ -113,11 +114,15 @@ export default function FormPage() {
           {preview && (
             <div className="mt-4">
               <p className="text-sm text-gray-400 mb-2">Preview:</p>
-              <img
-                src={preview}
-                alt="Preview"
-                className="rounded-lg max-h-64 w-full object-cover border border-gray-700"
-              />
+              <div className="relative w-full h-64 border border-gray-700 rounded-lg overflow-hidden">
+                <Image
+                  src={preview}
+                  alt="Preview"
+                  fill
+                  className="object-cover rounded-lg"
+                  unoptimized // ✅ Needed for local object URLs
+                />
+              </div>
             </div>
           )}
 
@@ -137,7 +142,9 @@ export default function FormPage() {
         )}
         {result?.imageUrl && (
           <div className="mt-6 text-center">
-            <p className="text-green-400 font-medium">✅ Submitted successfully!</p>
+            <p className="text-green-400 font-medium">
+              ✅ Submitted successfully!
+            </p>
             <a
               href={result.imageUrl}
               target="_blank"

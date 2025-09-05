@@ -96,8 +96,8 @@ export default function LandingPage() {
       </div>
 
       {filteredStartups.length === 0 && !loading && (
-        <p className="text-center text-gray-400 mt-10">
-          No startup ideas found for "{query}"
+         <p className="text-center text-gray-400 mt-10">
+          No startup ideas found for &quot;{query}&quot;
         </p>
       )}
     </div>
