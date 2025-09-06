@@ -46,13 +46,13 @@ export default function FormPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-black p-23">
-      <div className="w-full flex-grow max-w-lg bg-zinc-900 rounded-2xl shadow-xl p-8">
+    <main className="min-h-screen flex items-center justify-center bg-black px-4 sm:px-6">
+      <div className="w-full max-w-full sm:max-w-md md:max-w-lg bg-zinc-900 rounded-2xl shadow-xl p-6 sm:p-8">
         <h1 className="text-2xl font-bold text-orange-500 mb-6 text-center">
           Submit Your Startup Idea 🚀
         </h1>
 
-        <form onSubmit={onSubmit} className=" space-y-5">
+        <form onSubmit={onSubmit} className="space-y-5">
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -120,7 +120,7 @@ export default function FormPage() {
                   alt="Preview"
                   fill
                   className="object-cover rounded-lg"
-                  unoptimized // ✅ Needed for local object URLs
+                  unoptimized
                 />
               </div>
             </div>
